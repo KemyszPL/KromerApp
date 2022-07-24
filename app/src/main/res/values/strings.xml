@@ -8,4 +8,6 @@
     <string name="email">E-mail</string>
     <string name="loginhere">Already have an account?</string>
     <string name="signuphere">Don\'t have an account?</string>
+    <string name="loginsuccess">Log in successful</string>
+    <string name="signupsuccess">Sign Up Success</string>
 </resources>
