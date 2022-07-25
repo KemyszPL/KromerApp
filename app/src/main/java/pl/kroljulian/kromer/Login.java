@@ -33,55 +33,62 @@ public class Login extends AppCompatActivity {
         textViewSignUp = findViewById(R.id.signupText);
         progressBar = findViewById(R.id.progress);
 
-        buttonLogin.setOnClickListener(v -> {
-            String username, password;
-            username = String.valueOf(textInputEditTextUsername.getText());
-            password = String.valueOf(textInputEditTextPassword.getText());
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username, password;
+                username = String.valueOf(textInputEditTextUsername.getText());
+                password = String.valueOf(textInputEditTextPassword.getText());
 
-            if(!username.equals("") && !password.equals("")) {
+                if (!username.equals("") && !password.equals("")) {
 
-                //Start ProgressBar first (Set visibility VISIBLE)
-                progressBar.setVisibility(View.VISIBLE);
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(() -> {
-                    //Starting Write and Read data with URL
-                    //Creating array for parameters
-                    String[] field = new String[2];
-                    field[0] = "username";
-                    field[1] = "password";
-                    //Creating array for data
-                    String[] data = new String[2];
-                    data[0] = username;
-                    data[1] = password;
-                    PutData putData = new PutData("http://192.168.0.103/LoginRegister/login.php", "POST", field, data);
-                    if (putData.startPut()) {
-                        if (putData.onComplete()) {
-                            String result = putData.getResult();
-                            //End ProgressBar (Set visibility to GONE)
-                            progressBar.setVisibility(View.GONE);
-                            Log.i("PutData", result);
-                            if(result.equals(getString(R.string.loginsuccess))) {
-                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                    //Start ProgressBar first (Set visibility VISIBLE)
+                    progressBar.setVisibility(View.VISIBLE);
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Starting Write and Read data with URL
+                            //Creating array for parameters
+                            String[] field = new String[2];
+                            field[0] = "username";
+                            field[1] = "password";
+                            //Creating array for data
+                            String[] data = new String[2];
+                            data[0] = username;
+                            data[1] = password;
+                            PutData putData = new PutData("http://192.168.0.103:8080/LoginRegister/login.php", "POST", field, data);
+                            if (putData.startPut()) {
+                                if (putData.onComplete()) {
+                                    String result = putData.getResult();
+                                    //End ProgressBar (Set visibility to GONE)
+                                    progressBar.setVisibility(View.GONE);
+                                    Log.i("PutData", result);
+                                    if (result.equals(getString(R.string.loginsuccess))) {
+                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
                             }
-                            else {
-                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                            }
+                            //End Write and Read data with URL
                         }
-                    }
-                    //End Write and Read data with URL
-                });
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "All fields are required.", Toast.LENGTH_SHORT).show();
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "All fields are required.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        textViewSignUp.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), SignUp.class);
-            startActivity(intent);
-            finish();
+        textViewSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SignUp.class);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 }

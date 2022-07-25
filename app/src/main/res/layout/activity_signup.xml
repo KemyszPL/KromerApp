@@ -138,7 +138,7 @@
             android:id="@+id/loginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/poppinsmedium"
             android:text="@string/loginhere"
             app:layout_constraintEnd_toEndOf="parent"
