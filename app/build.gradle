@@ -23,7 +23,7 @@ android {
         versionName '0.0.2'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionNameSuffix 'pre'
+        versionNameSuffix 'pre03'
     }
 
     buildTypes {
