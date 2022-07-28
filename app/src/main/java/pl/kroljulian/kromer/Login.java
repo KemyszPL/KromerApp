@@ -1,5 +1,7 @@
 package pl.kroljulian.kromer;
 
+import static java.lang.String.*;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -27,23 +29,22 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        textInputEditTextUsername = findViewById(R.id.username);
-        textInputEditTextPassword = findViewById(R.id.password);
+        textInputEditTextUsername = findViewById(R.id.usernameLogin);
+        textInputEditTextPassword = findViewById(R.id.passwordLogin);
         buttonLogin = findViewById(R.id.buttonLogin);
         textViewSignUp = findViewById(R.id.signupText);
-        progressBar = findViewById(R.id.progress);
+        // progressBar = findViewById(R.id.progress);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username, password;
-                username = String.valueOf(textInputEditTextUsername.getText());
-                password = String.valueOf(textInputEditTextPassword.getText());
+                String username = valueOf(textInputEditTextUsername.getText());
+                String password = valueOf(textInputEditTextPassword.getText());
 
                 if (!username.equals("") && !password.equals("")) {
 
                     //Start ProgressBar first (Set visibility VISIBLE)
-                    progressBar.setVisibility(View.VISIBLE);
+                    // progressBar.setVisibility(View.VISIBLE);
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         @Override
@@ -62,7 +63,7 @@ public class Login extends AppCompatActivity {
                                 if (putData.onComplete()) {
                                     String result = putData.getResult();
                                     //End ProgressBar (Set visibility to GONE)
-                                    progressBar.setVisibility(View.GONE);
+                                    // progressBar.setVisibility(View.GONE);
                                     Log.i("PutData", result);
                                     if (result.equals(getString(R.string.loginsuccess))) {
                                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
