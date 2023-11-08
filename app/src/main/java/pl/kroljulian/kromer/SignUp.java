@@ -29,7 +29,7 @@ public class SignUp extends AppCompatActivity {
 
     TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
     Button buttonSignUp;
-    TextView textViewLogin;
+    TextView textViewLogin, textViewError;
     ProgressBar progressBar;
     String fullname, email, password;
     @Override
@@ -44,6 +44,8 @@ public class SignUp extends AppCompatActivity {
         buttonSignUp = findViewById(R.id.buttonSignUp);
         textViewLogin = findViewById(R.id.loginText);
         progressBar = findViewById(R.id.progress);
+        textViewError = findViewById(R.id.textViewError);
+        textViewError.setVisibility(View.GONE);
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +64,10 @@ public class SignUp extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(), Login.class);
                                     startActivity(intent);
                                     finish();
-                                } else Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    textViewError.setVisibility(View.VISIBLE);
+                                    textViewError.setText(response);
+                                }
                             }
                         }, new Response.ErrorListener() {
                     @Override
