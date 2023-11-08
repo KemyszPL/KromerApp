@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    signingConfigs {
+    /*signingConfigs {
         debug {
             storeFile file('/home/szymonlewandowski/Dokumenty/android_keystore.jks')
             storePassword 'dupapipa'
             keyPassword 'dupapipa'
             keyAlias 'key0'
         }
-    }
+    }*/
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
