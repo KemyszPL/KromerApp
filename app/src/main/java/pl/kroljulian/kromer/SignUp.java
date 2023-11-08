@@ -58,7 +58,7 @@ public class SignUp extends AppCompatActivity {
                             @Override
                             public void onResponse(String response) {
                                 if (response.equals("Success")) {
-                                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Registration successful", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), Login.class);
                                     startActivity(intent);
                                     finish();
