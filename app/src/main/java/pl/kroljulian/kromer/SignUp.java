@@ -13,8 +13,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity {
 
@@ -22,6 +31,7 @@ public class SignUp extends AppCompatActivity {
     Button buttonSignUp;
     TextView textViewLogin;
     ProgressBar progressBar;
+    String fullname, email, password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,58 +48,37 @@ public class SignUp extends AppCompatActivity {
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullname, username, password, email;
                 fullname = String.valueOf(textInputEditTextFullname.getText());
-                username = String.valueOf(textInputEditTextUsername.getText());
-                password = String.valueOf(textInputEditTextPassword.getText());
                 email = String.valueOf(textInputEditTextEmail.getText());
-
-                if(!fullname.equals("") && !username.equals("") && !password.equals("") && !email.equals("")) {
-
-                    //Start ProgressBar first (Set visibility VISIBLE)
-                    progressBar.setVisibility(View.VISIBLE);
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Starting Write and Read data with URL
-                            //Creating array for parameters
-                            String[] field = new String[4];
-                            field[0] = "fullname";
-                            field[1] = "username";
-                            field[2] = "password";
-                            field[3] = "email";
-                            //Creating array for data
-                            String[] data = new String[4];
-                            data[0] = fullname;
-                            data[1] = username;
-                            data[2] = password;
-                            data[3] = email;
-                            PutData putData = new PutData("http://bigshot1997.ddns.net:1268/signup.php", "POST", field, data);
-                            if (putData.startPut()) {
-                                if (putData.onComplete()) {
-                                    String result = putData.getResult();
-                                    //End ProgressBar (Set visibility to GONE)
-                                    progressBar.setVisibility(View.GONE);
-                                    Log.i("PutData", result);
-                                    if(result.equals(getString(R.string.signupsuccess))) {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), Login.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
+                password = String.valueOf(textInputEditTextPassword.getText());
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                String url ="http://bigshot1997.ddns.net:1268/kromerApp/db-api/signup.php";
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.equals("success")) {
+                                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                             }
-                            //End Write and Read data with URL
-                        }
-                    });
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "All fields are required.", Toast.LENGTH_SHORT).show();
-                }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    protected Map<String, String> getParams(){
+                        Map<String, String> paramV = new HashMap<>();
+                        paramV.put("name", fullname);
+                        paramV.put("email", email);
+                        paramV.put("password", password);
+                        return paramV;
+                    }
+                };
+                queue.add(stringRequest);
             }
         });
         textViewLogin.setOnClickListener(new View.OnClickListener() {
