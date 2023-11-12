@@ -45,11 +45,11 @@ public class SignUp extends AppCompatActivity {
         textViewLogin = findViewById(R.id.loginText);
         progressBar = findViewById(R.id.progress);
         textViewError = findViewById(R.id.textViewError);
-        textViewError.setVisibility(View.GONE);
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textViewError.setVisibility(View.INVISIBLE);
                 fullname = String.valueOf(textInputEditTextFullname.getText());
                 email = String.valueOf(textInputEditTextEmail.getText());
                 password = String.valueOf(textInputEditTextPassword.getText());
