@@ -15,8 +15,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
@@ -38,49 +47,39 @@ public class Login extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = valueOf(textInputEditTextUsername.getText());
+                //textViewError.setVisibility(View.INVISIBLE);
+                String email = String.valueOf(textInputEditTextUsername.getText());
                 String password = valueOf(textInputEditTextPassword.getText());
-
-                if (!username.equals("") && !password.equals("")) {
-
-                    //Start ProgressBar first (Set visibility VISIBLE)
-                    // progressBar.setVisibility(View.VISIBLE);
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Starting Write and Read data with URL
-                            //Creating array for parameters
-                            String[] field = new String[2];
-                            field[0] = "username";
-                            field[1] = "password";
-                            //Creating array for data
-                            String[] data = new String[2];
-                            data[0] = username;
-                            data[1] = password;
-                            PutData putData = new PutData("http://bigshot1997.ddns.net:1268/login.php", "POST", field, data);
-                            if (putData.startPut()) {
-                                if (putData.onComplete()) {
-                                    String result = putData.getResult();
-                                    //End ProgressBar (Set visibility to GONE)
-                                    // progressBar.setVisibility(View.GONE);
-                                    Log.i("PutData", result);
-                                    if (result.equals(getString(R.string.loginsuccess))) {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                    }
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                String url ="http://bigshot1997.ddns.net:1268/kromerApp/db-api/login.php";
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                if (response.equals("Success")) {
+                                    Toast.makeText(getApplicationContext(), "Log-in successful", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    /* textViewError.setVisibility(View.VISIBLE);
+                                    textViewError.setText(response); */
                                 }
                             }
-                            //End Write and Read data with URL
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "All fields are required.", Toast.LENGTH_SHORT).show();
-                }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }){
+                    protected Map<String, String> getParams(){
+                        Map<String, String> paramV = new HashMap<>();
+                        paramV.put("email", email);
+                        paramV.put("password", password);
+                        return paramV;
+                    }
+                };
+                queue.add(stringRequest);
             }
         });
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
